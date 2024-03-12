@@ -1,12 +1,23 @@
 const express = require("express");
 const router = express.Router();
 const Products = require("../models/ProductModel");
-const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 router.get("/", async (req, res) => {
 	const products = await Products.find({});
 	res.status(200).json(products);
+});
+
+// getting product by id
+router.get("/:id", async (req, res) => {
+	const id = req.params.id;
+
+	if (!id) {
+		res.status(400).json({ message: "No id" });
+		return;
+	}
+	const data = await Products.findById(id);
+	res.status(200).json(data);
 });
 
 router.post("/post", async (req, res) => {
